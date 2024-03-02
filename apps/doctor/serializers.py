@@ -43,12 +43,29 @@ class DoctorWeekDaysSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+
+class DoctorSpecialistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DoctorSpecialist
+        fields = "__all__"
+
+
 class DoctorDetailSerializer(serializers.ModelSerializer):
     city = DoctorCitySerializer()
     address = DoctorAddressSerializer()
     telephones = DoctorTelephoneSerializer(many=True)
     week_days = DoctorWeekDaysSerializer(many=True)
+    sepecialist = DoctorSpecialistSerializer()
 
     class Meta:
         model = DoctorUser
         fields = "__all__"
+
+
+class DoctorListSerializer(serializers.ModelSerializer):
+    city = DoctorCitySerializer()
+    sepecialist = DoctorSpecialistSerializer()
+
+    class Meta:
+        model = DoctorUser
+        fields = ("id","city","sepecialist","",)

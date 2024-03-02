@@ -20,25 +20,6 @@ class DoctorCity(TimeStampedModel):
         verbose_name_plural = "Doctor Cities"
 
 
-class DoctorUser(TimeStampedModel):
-    """
-    Represents a doctor user.
-    """
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    medical_system_code = models.IntegerField(null=True, blank=True)
-    bio = models.TextField(null=True, blank=True)
-    cost_of_visit = models.PositiveBigIntegerField(default=10000, null=True, blank=True)
-    city = models.ForeignKey(DoctorCity, on_delete=models.CASCADE, null=True, blank=True)
-
-    def __str__(self):
-        return f"Doctor profile for {self.user.username}"
-
-    class Meta:
-        verbose_name = "Doctor User"
-        verbose_name_plural = "Doctor Users"
-
-
 class DoctorSpecialist(TimeStampedModel):
     """
     Represents a specialist category of a doctor.
@@ -52,6 +33,27 @@ class DoctorSpecialist(TimeStampedModel):
     class Meta:
         verbose_name = "Doctor Specialist"
         verbose_name_plural = "Doctor Specialists"
+
+        
+class DoctorUser(TimeStampedModel):
+    """
+    Represents a doctor user.
+    """
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    medical_system_code = models.IntegerField(null=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
+    cost_of_visit = models.PositiveBigIntegerField(default=10000, null=True, blank=True)
+    city = models.ForeignKey(DoctorCity, on_delete=models.CASCADE, null=True, blank=True)
+    sepecialist = models.ForeignKey(DoctorSpecialist, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f"Doctor profile for {self.user.username}"
+
+    class Meta:
+        verbose_name = "Doctor User"
+        verbose_name_plural = "Doctor Users"
+
 
 
 class DoctorAddress(TimeStampedModel):
