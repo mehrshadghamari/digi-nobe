@@ -33,7 +33,7 @@ def get_tokens_for_user(user):
     }
 
 
-class UserLogin(APIView):
+class DoctorLogin(APIView):
     def post(self, request, role):
         phone_number = request.data.get("phone_number")
         password = request.data.get("password")
@@ -50,9 +50,31 @@ class UserLogin(APIView):
             return Response({"message": "رمز عبور وارد شده صحیح نمیباشد"}, status=status.HTTP_400_BAD_REQUEST)
 
         # Check user role
-        if role == "doctor" and not DoctorUser.objects.filter(user=user).exists():
+        if not DoctorUser.objects.filter(user=user).exists():
             return Response({"message": "کاربر مورد نظر دکتر نمیباشد"}, status=status.HTTP_403_FORBIDDEN)
-        elif role == "patient" and not PatientUser.objects.filter(user=user).exists():
+
+        token = get_tokens_for_user(user)
+        return Response(token, status=status.HTTP_200_OK)
+
+
+class PatientLogin(APIView):
+    def post(self, request, role):
+        phone_number = request.data.get("phone_number")
+        password = request.data.get("password")
+
+        if not phone_number or not password:
+            return Response({"message": "شماره تلفن و رمز عبور الزامی است"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(phone_number=phone_number)
+        except User.DoesNotExist:
+            return Response({"message": "شماره تلفن وارد شده معتبر نمیباشد"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not user.check_password(password):
+            return Response({"message": "رمز عبور وارد شده صحیح نمیباشد"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check user role
+        if not PatientUser.objects.filter(user=user).exists():
             return Response({"message": "کاربر مورد نظر بیمار نمیباشد"}, status=status.HTTP_403_FORBIDDEN)
 
         token = get_tokens_for_user(user)
