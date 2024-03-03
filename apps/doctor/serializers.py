@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from apps.doctor.models import DoctorAddress
 from apps.doctor.models import DoctorCity
+from apps.doctor.models import DoctorImage
 from apps.doctor.models import DoctorSpecialist
 from apps.doctor.models import DoctorUser
 from apps.doctor.models import ShiftTime
@@ -43,14 +44,27 @@ class DoctorWeekDaysSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
 class DoctorSpecialistSerializer(serializers.ModelSerializer):
     class Meta:
         model = DoctorSpecialist
         fields = "__all__"
 
 
+class DoctorImageSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField("get_image_url")
+
+    def get_image_url(self, obj):
+        request = self.context.get("request")
+        image_url = obj.image.url
+        return request.build_absolute_uri(image_url)
+
+    class Meta:
+        model = DoctorImage
+        fields = "__all__"
+
+
 class DoctorDetailSerializer(serializers.ModelSerializer):
+    image = DoctorImageSerializer()
     city = DoctorCitySerializer()
     address = DoctorAddressSerializer()
     telephones = DoctorTelephoneSerializer(many=True)
@@ -65,7 +79,13 @@ class DoctorDetailSerializer(serializers.ModelSerializer):
 class DoctorListSerializer(serializers.ModelSerializer):
     city = DoctorCitySerializer()
     sepecialist = DoctorSpecialistSerializer()
+    image = DoctorImageSerializer()
 
     class Meta:
         model = DoctorUser
-        fields = ("id","city","sepecialist","",)
+        fields = (
+            "id",
+            "city",
+            "sepecialist",
+            "image",
+        )

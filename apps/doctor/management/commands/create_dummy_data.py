@@ -18,14 +18,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # Initialize Faker with the Persian locale
-        fake = Faker('fa_IR')
+        fake = Faker("fa_IR")
 
         for _ in range(20):  # Loop to create 20 sets of data
             # Create dummy User with more realistic data
             username = fake.user_name()
             email = fake.email()
             password = "12345678"  # Consider using set_password for hashing
-            phone_number = f"98912{random.randint(1000000, 9999999)}"    # Generates a realistic phone number
+            phone_number = f"98912{random.randint(1000000, 9999999)}"  # Generates a realistic phone number
 
             user_instance = User.objects.create(
                 username=username, email=email, password=password, phone_number=phone_number
@@ -34,7 +34,7 @@ class Command(BaseCommand):
             # Create dummy DoctorCity with Persian names
             city = DoctorCity.objects.create(
                 province=fake.state(),  # Generates a realistic Persian province name
-                city=fake.city()  # Generates a realistic Persian city name
+                city=fake.city(),  # Generates a realistic Persian city name
             )
 
             # Create dummy DoctorUser

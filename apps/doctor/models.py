@@ -34,7 +34,7 @@ class DoctorSpecialist(TimeStampedModel):
         verbose_name = "Doctor Specialist"
         verbose_name_plural = "Doctor Specialists"
 
-        
+
 class DoctorUser(TimeStampedModel):
     """
     Represents a doctor user.
@@ -53,7 +53,6 @@ class DoctorUser(TimeStampedModel):
     class Meta:
         verbose_name = "Doctor User"
         verbose_name_plural = "Doctor Users"
-
 
 
 class DoctorAddress(TimeStampedModel):
@@ -136,3 +135,8 @@ class ShiftTime(TimeStampedModel):
     class Meta:
         verbose_name = "Shift Time"
         verbose_name_plural = "Shift Times"
+
+
+class DoctorImage(TimeStampedModel):
+    image = models.ImageField()
+    doctor = models.OneToOneField(DoctorUser, on_delete=models.CASCADE, related_name="image")
