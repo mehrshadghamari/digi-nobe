@@ -34,7 +34,7 @@ def get_tokens_for_user(user):
 
 
 class DoctorLogin(APIView):
-    def post(self, request, role):
+    def post(self, request):
         phone_number = request.data.get("phone_number")
         password = request.data.get("password")
 
@@ -58,7 +58,7 @@ class DoctorLogin(APIView):
 
 
 class PatientLogin(APIView):
-    def post(self, request, role):
+    def post(self, request):
         phone_number = request.data.get("phone_number")
         password = request.data.get("password")
 

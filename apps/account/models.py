@@ -93,7 +93,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     first_name = models.CharField(max_length=80)
     last_name = models.CharField(max_length=80)
-    national_code = models.CharField(max_length=10, unique=True, null=True)
+    national_code = models.CharField(max_length=10, unique=True, null=True, blank=True)
 
     email = models.EmailField(("email address"), unique=True, null=True, blank=True)
     phone_number = models.BigIntegerField(
