@@ -3,7 +3,6 @@
 *.pot
 *.pyc
 local_*.py
-migrations*/
 __pycache__/
 local_settings.py
 *db.sqlite3*
