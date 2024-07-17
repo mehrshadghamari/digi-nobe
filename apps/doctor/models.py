@@ -35,6 +35,13 @@ class DoctorSpecialist(TimeStampedModel):
         verbose_name_plural = "Doctor Specialists"
 
 
+class Insurance(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
 class DoctorUser(TimeStampedModel):
     """
     Represents a doctor user.
@@ -46,6 +53,7 @@ class DoctorUser(TimeStampedModel):
     cost_of_visit = models.PositiveBigIntegerField(default=10000, null=True, blank=True)
     city = models.ForeignKey(DoctorCity, on_delete=models.CASCADE, null=True, blank=True)
     sepecialist = models.ForeignKey(DoctorSpecialist, on_delete=models.CASCADE, null=True, blank=True)
+    insurances = models.ManyToManyField(Insurance, blank=True)
 
     def __str__(self):
         return f"Doctor profile for {self.user.username}"
@@ -122,15 +130,15 @@ class ShiftTime(TimeStampedModel):
     week_day = models.ForeignKey(WeekDays, on_delete=models.CASCADE, related_name="shift_times")
     start_time = models.TimeField()
     end_time = models.TimeField()
-    capacity = models.PositiveIntegerField(default=1)
-    reserved_capacity = models.PositiveIntegerField(default=0)
+    # capacity = models.PositiveIntegerField(default=1)
+    # reserved_capacity = models.PositiveIntegerField(default=0)
 
-    @property
-    def free_capacity(self):
-        return self.capacity - self.reserved_capacity
+    # @property
+    # def free_capacity(self):
+    #     return self.capacity - self.reserved_capacity
 
     def __str__(self):
-        return f"{self.week_day.day}: {self.start_time} - {self.end_time} (Capacity: {self.capacity})"
+        return f"{self.week_day.day}: {self.start_time} - {self.end_time}"
 
     class Meta:
         verbose_name = "Shift Time"

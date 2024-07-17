@@ -50,8 +50,8 @@ class Command(BaseCommand):
             DoctorAddress.objects.create(
                 doctor=doctor_user,
                 address=fake.address(),  # Generates a realistic Persian address
-                lat=fake.latitude(),
-                lng=fake.longitude(),
+                # lat=fake.latitude(),
+                # lng=fake.longitude(),
             )
 
             # Create dummy Telephone with a realistic phone number
@@ -67,8 +67,8 @@ class Command(BaseCommand):
                     week_day=week_day,
                     start_time=random.choice(["08:00", "10:00", "12:00"]),
                     end_time=random.choice(["14:00", "16:00", "19:00"]),
-                    capacity=random.randint(1, 10),
-                    reserved_capacity=random.randint(0, 5),
+                    # capacity=random.randint(1, 10),
+                    # reserved_capacity=random.randint(0, 5),
                 )
 
         self.stdout.write(self.style.SUCCESS("Successfully created dummy data for Doctor app"))
