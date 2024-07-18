@@ -74,7 +74,7 @@ class DoctorDetailSerializer(serializers.ModelSerializer):
     address = DoctorAddressSerializer()
     telephones = DoctorTelephoneSerializer(many=True)
     week_days = DoctorWeekDaysSerializer(many=True)
-    sepecialist = DoctorSpecialistSerializer()
+    specialist = DoctorSpecialistSerializer()
 
     class Meta:
         model = DoctorUser
@@ -83,7 +83,7 @@ class DoctorDetailSerializer(serializers.ModelSerializer):
 
 class DoctorListSerializer(serializers.ModelSerializer):
     city = DoctorCitySerializer()
-    sepecialist = DoctorSpecialistSerializer()
+    specialist = DoctorSpecialistSerializer()
     image = DoctorImageSerializer()
     full_name = serializers.CharField(source="user.full_name")
 
@@ -93,7 +93,7 @@ class DoctorListSerializer(serializers.ModelSerializer):
             "id",
             "full_name",
             "city",
-            "sepecialist",
+            "specialist",
             "image",
         )
 

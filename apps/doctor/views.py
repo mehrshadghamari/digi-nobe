@@ -76,12 +76,12 @@ class DoctorList(APIView):
         city_id = request.query_params.get("city")
         specialist_id = request.query_params.get("specialist")
 
-        query = DoctorUser.objects.all().select_related("city", "sepecialist", "image")
+        query = DoctorUser.objects.all().select_related("city", "specialist", "image")
 
         if city_id:
             query = query.filter(city_id=city_id)
         if specialist_id:
-            query = query.filter(sepecialist_id=specialist_id)
+            query = query.filter(specialist_id=specialist_id)
 
         paginator = Paginator(query, page_size)
         serializer = DoctorListSerializer(paginator.page(page_number), many=True, context={"request": request})
@@ -103,7 +103,7 @@ class DoctorList(APIView):
 class HomePageDocotorList(APIView):
     def get(self, request):
 
-        query = DoctorUser.objects.all().select_related("city", "sepecialist", "image").order_by("?")[:15]
+        query = DoctorUser.objects.all().select_related("city", "specialist", "image").order_by("?")[:15]
         serializer = DoctorListSerializer(query, many=True, context={"request": request})
         return Response(
             serializer.data,
@@ -129,7 +129,7 @@ class DoctorSearch(APIView):
         if not search_query:
             return Response({"message": "Query parameter 'q' is required."}, status=status.HTTP_400_BAD_REQUEST)
 
-        doctors = DoctorUser.objects.select_related("city", "sepecialist", "image").filter(
+        doctors = DoctorUser.objects.select_related("city", "specialist", "image").filter(
             Q(user__first_name__icontains=search_query)
             | Q(user__last_name__icontains=search_query)
             | Q(specialist__name__icontains=search_query)

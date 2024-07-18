@@ -52,7 +52,7 @@ class DoctorUser(TimeStampedModel):
     bio = models.TextField(null=True, blank=True)
     cost_of_visit = models.PositiveBigIntegerField(default=10000, null=True, blank=True)
     city = models.ForeignKey(DoctorCity, on_delete=models.CASCADE, null=True, blank=True)
-    sepecialist = models.ForeignKey(DoctorSpecialist, on_delete=models.CASCADE, null=True, blank=True)
+    specialist = models.ForeignKey(DoctorSpecialist, on_delete=models.CASCADE, null=True, blank=True)
     insurances = models.ManyToManyField(Insurance, blank=True)
 
     def __str__(self):
