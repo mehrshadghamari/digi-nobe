@@ -59,9 +59,9 @@ class DoctorImageSerializer(serializers.ModelSerializer):
 
     def get_image_url(self, obj):
         request = self.context.get("request")
-        image_url = obj.image.url
-        if image_url:
-            return request.build_absolute_uri(image_url)
+        image_obj = obj.image
+        if image_obj:
+            return request.build_absolute_uri(image_obj.url)
         return ""
 
     class Meta:
