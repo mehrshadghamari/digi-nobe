@@ -56,7 +56,7 @@ class DoctorUser(TimeStampedModel):
     insurances = models.ManyToManyField(Insurance, blank=True)
 
     def __str__(self):
-        return f"Doctor profile for {self.user.username}"
+        return f"Doctor profile for {self.user.phone_number}"
 
     class Meta:
         verbose_name = "Doctor User"
@@ -74,7 +74,7 @@ class DoctorAddress(TimeStampedModel):
     lng = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
 
     def __str__(self):
-        return f"Address for {self.doctor.user.username}"
+        return f"Address for {self.doctor}"
 
     class Meta:
         verbose_name = "Doctor Address"
@@ -148,3 +148,6 @@ class ShiftTime(TimeStampedModel):
 class DoctorImage(TimeStampedModel):
     image = models.ImageField()
     doctor = models.OneToOneField(DoctorUser, on_delete=models.CASCADE, related_name="image")
+
+    def __str__(self):
+        return self.doctor.user.full_name
