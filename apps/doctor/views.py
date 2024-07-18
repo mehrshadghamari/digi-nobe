@@ -135,7 +135,7 @@ class DoctorSearch(APIView):
             | Q(specialist__name__icontains=search_query)
         )
 
-        serializer = DoctorListSerializer(doctors, many=True)
+        serializer = DoctorListSerializer(doctors,many=True,context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
