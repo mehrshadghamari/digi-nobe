@@ -92,16 +92,16 @@ def get_tokens_for_user(user):
 )
 class DoctorLogin(APIView):
     def post(self, request):
-        phone_number = request.data.get("phone_number")
+        national_code = request.data.get("national_code")
         password = request.data.get("password")
 
-        if not phone_number or not password:
-            return Response({"message": "شماره تلفن و رمز عبور الزامی است"}, status=status.HTTP_400_BAD_REQUEST)
+        if not national_code or not password:
+            return Response({"message": "کدملی و رمز عبور الزامی است"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            user = User.objects.get(phone_number=phone_number)
+            user = User.objects.get(national_code=national_code)
         except User.DoesNotExist:
-            return Response({"message": "شماره تلفن وارد شده معتبر نمیباشد"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "کدملی وارد شده معتبر نمیباشد"}, status=status.HTTP_400_BAD_REQUEST)
 
         if not user.check_password(password):
             return Response({"message": "رمز عبور وارد شده صحیح نمیباشد"}, status=status.HTTP_400_BAD_REQUEST)
