@@ -123,12 +123,20 @@ class AppointmentReportSerializer(serializers.ModelSerializer):
         ]
 
 
+class DoctorImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DoctorImage
+        fields = [
+            "image",
+        ]
+
 class DoctorUserUpdateSerializer(serializers.ModelSerializer):
     old_password = serializers.CharField(write_only=True, required=False)
     new_password = serializers.CharField(write_only=True, required=False)
     address = serializers.CharField(write_only=True, required=False, allow_blank=True)
     email = serializers.EmailField(write_only=True, required=False)
     medical_system_code = serializers.IntegerField(write_only=True, required=False)
+    image = DoctorImageSerializer(required=False)
 
     class Meta:
         model = User
@@ -142,6 +150,7 @@ class DoctorUserUpdateSerializer(serializers.ModelSerializer):
             "new_password",
             "address",
             "medical_system_code",
+            "image",
         ]
 
     def validate(self, data):
@@ -177,9 +186,16 @@ class DoctorUserUpdateSerializer(serializers.ModelSerializer):
             dr_obj = DoctorUser.objects.get(user=instance)
             dr_obj.medical_system_code = validated_data["medical_system_code"]
             dr_obj.save()
+        
+        image_data = validated_data.pop("image")
+
+        if image_data:
+            doctor_user = DoctorUser.objects.get(user_id=instance.id)
+            DoctorImage.objects.filter(doctor=doctor_user).delete()
+            DoctorImage.objects.create(doctor=doctor_user, **image_data)
 
         for attr, value in validated_data.items():
-            if attr not in ["old_password", "new_password", "address", "city_id", "medical_system_code"]:
+            if attr not in ["old_password", "new_password", "address", "city_id", "medical_system_code","image"]:
                 setattr(instance, attr, value)
 
         instance.save()
