@@ -202,6 +202,44 @@ class DoctorUserUpdateSerializer(serializers.ModelSerializer):
         return instance
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["phone_number", "first_name", "last_name", "national_code", "email"]
+
+class ShiftTimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShiftTime
+        fields = ["start_time", "end_time"]
+
+
+class WeekDaysSerializer(serializers.ModelSerializer):
+    shift_times = ShiftTimeSerializer(many=True)
+
+    class Meta:
+        model = WeekDays
+        fields = ["day", "shift_times"]
+
+class DoctorProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    address = DoctorAddressSerializer()
+    image = DoctorImageSerializer()
+    workdays = WeekDaysSerializer(many=True, source='weekdays_set')
+
+    class Meta:
+        model = DoctorUser
+        fields = [
+            "user",
+            "medical_system_code",
+            "bio",
+            "cost_of_visit",
+            "city",
+            "specialist",
+            "address",
+            "image",
+            "workdays",
+        ]
+
 class UpdateShiftTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShiftTime

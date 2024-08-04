@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 from apps.doctor.models import DoctorUser
 from apps.doctor.models import ShiftTime
 from apps.doctor.models import WeekDays
-from apps.doctor.serializers import AppointmentReportSerializer
+from apps.doctor.serializers import AppointmentReportSerializer,DoctorProfileSerializer
 from apps.doctor.serializers import DoctorDetailSerializer
 from apps.doctor.serializers import DoctorListSerializer
 from apps.doctor.serializers import DoctorUserUpdateSerializer
@@ -103,7 +103,7 @@ class DoctorList(APIView):
 class HomePageDocotorList(APIView):
     def get(self, request):
 
-        query = DoctorUser.objects.all().select_related("city", "specialist", "image").order_by("?")[:15]
+        query = DoctorUser.objects.all().select_related("city", "specialist", "image").order_by("?")[:8]
         serializer = DoctorListSerializer(query, many=True, context={"request": request})
         return Response(
             serializer.data,
@@ -220,6 +220,21 @@ class DoctorUserUpdateView(APIView):
             serializer.save()
             return Response({"message": "Doctor details updated successfully"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DoctorProfileDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        try:
+            doctor_user = DoctorUser.objects.select_related('user', 'city', 'specialist').prefetch_related('weekdays_set__shifttime_set').get(user=user)
+        except DoctorUser.DoesNotExist:
+            return Response({"message": "You are not authorized to access this resource"}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = DoctorProfileSerializer(doctor_user, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 @extend_schema(
